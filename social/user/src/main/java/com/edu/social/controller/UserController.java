@@ -38,6 +38,7 @@ public class UserController {
     public BaseResponse<Long> userRegister() {
         return ResultUtils.success(new Date().getTime());
     }
+
     @PostMapping("/register")
     public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
         if (userRegisterRequest == null) {
@@ -85,18 +86,7 @@ public class UserController {
         return ResultUtils.success(safetyUser);
     }
 
-    @GetMapping("/search")
-    public BaseResponse<List<User>> searchUser(String username, HttpServletRequest request) {
-        userService.assertAdmin(request);
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        if (StringUtils.isNotBlank(username)) {
-            queryWrapper.like("username", username);
-        }
-        List<User> userList = userService.list(queryWrapper);
-        List<User> list = userList.stream().map(user -> userService.getSafetyUser(user)).collect(Collectors.toList());
-        return ResultUtils.success(list);
-    }
-
+    
     @PostMapping("/delete")
     public BaseResponse<Boolean> deleteUser(@RequestBody long id, HttpServletRequest request) {
         userService.assertAdmin(request);
