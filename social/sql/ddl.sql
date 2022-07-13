@@ -26,5 +26,18 @@ create table my_db.user
 )comment '用户';
 
 
+create table my_db.subscribe
+(
+    id int auto_increment
+        primary key,
+    be_subuser varchar(256) not null comment '被关注用户',
+    subuser varchar(256) not null comment '关注者/粉丝',
+    isDelete int default 0 null comment '0:仍在关注 1:取关',
+    createTime datetime default CURRENT_TIMESTAMP not null comment '第一次建立关系的时间',
+    updateTime datetime default CURRENT_TIMESTAMP not null comment '关系变动最新时间'
+) comment '关注表';
+
+
+
 
 
