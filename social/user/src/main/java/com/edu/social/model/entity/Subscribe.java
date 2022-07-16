@@ -16,7 +16,6 @@ public class Subscribe implements Serializable {
     /**
      * 
      */
-    @TableId(type = IdType.AUTO)
     private Integer id;
 
     /**

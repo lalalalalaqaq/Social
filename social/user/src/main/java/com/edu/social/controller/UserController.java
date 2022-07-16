@@ -1,6 +1,5 @@
 package com.edu.social.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.edu.social.common.BaseResponse;
 import com.edu.social.common.ErrorCode;
 import com.edu.social.common.ResultUtils;
@@ -10,9 +9,6 @@ import com.edu.social.model.request.UserLoginRequest;
 import com.edu.social.model.request.UserRegisterRequest;
 import com.edu.social.service.UserService;
 
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
@@ -34,10 +30,7 @@ public class UserController {
     @Resource
     private UserService userService;
 
-    @GetMapping("/hello")
-    public BaseResponse<Long> userRegister() {
-        return ResultUtils.success(new Date().getTime());
-    }
+
 
     @PostMapping("/register")
     public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
@@ -86,7 +79,6 @@ public class UserController {
         return ResultUtils.success(safetyUser);
     }
 
-    
     @PostMapping("/delete")
     public BaseResponse<Boolean> deleteUser(@RequestBody long id, HttpServletRequest request) {
         userService.assertAdmin(request);

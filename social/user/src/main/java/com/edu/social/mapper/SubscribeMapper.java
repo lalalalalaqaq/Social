@@ -2,6 +2,11 @@ package com.edu.social.mapper;
 
 import com.edu.social.model.entity.Subscribe;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+
+import java.util.List;
 
 /**
 * @author 86135
@@ -9,7 +14,17 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @createDate 2022-07-14 00:09:44
 * @Entity com.edu.social.model.entity.Subscribe
 */
+@Mapper
 public interface SubscribeMapper extends BaseMapper<Subscribe> {
+
+    @Select("select  count(id) from subscribe where id = #{relationCode}")
+    Integer findSubrelation(Integer relationCode);
+
+    @Select("select beSubuser from subscribe where Subuser = #{Subuser}")
+    List<String> findRelation(String Subuser);
+
+    @Update("update subscribe set isdelete = 1 , updateTime = current_timestamp() where id = #{relationCode}")
+    Integer updateSubrelation(Integer relationCode);
 
 }
 

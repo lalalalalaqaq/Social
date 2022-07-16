@@ -23,7 +23,7 @@ public class UserMapperTest {
     @Test
     public void findByAccount(){
         final User user = userMapper.findOneUser("lalalalaqaq");
-        System.out.println(user.getUserAccount());
+        System.out.println(user);
     }
 
 }

@@ -31,4 +31,5 @@
         userRole,fanscount,followcount,
         lastdate
     </sql>
+
 </mapper>

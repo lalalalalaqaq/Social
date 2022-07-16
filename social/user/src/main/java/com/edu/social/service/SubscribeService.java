@@ -2,6 +2,7 @@ package com.edu.social.service;
 
 import com.edu.social.model.entity.Subscribe;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.edu.social.model.entity.User;
 
 import java.util.List;
 
@@ -16,12 +17,33 @@ public interface SubscribeService extends IService<Subscribe> {
      * 关注一个
      * @return
      */
-    Boolean SubscribeOne(String beSubUserAccount, String SubUserAccount);
+    Boolean Subscribe(String SubUserAccount, String beSubUserAccount);
 
     /**
      * 关注多个
      * @return
      */
-    Integer SubscribeMutil(String beSubUserAccount, List<String> SubUserAccount);
+    Boolean SubscribeMutil(String beSubUserAccount, String... SubUserAccount);
+
+    /**
+     * 取消一个关注
+     * @param beSubUserAccount
+     * @param SubUserAccount
+     * @return
+     */
+    Boolean delSubscribe(String beSubUserAccount, String SubUserAccount);
+
+    /**
+     * 取消多个关注
+     * @param beSubUserAccount
+     * @param SubUserAccount
+     * @return
+     */
+    Boolean delSubscribeMutil(String beSubUserAccount, String... SubUserAccount);
+
+    /**
+     * 展现关注列表
+     */
+    List<User> showSubscribe(String Subuser);
 
 }
