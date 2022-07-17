@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -40,15 +41,27 @@ public class SubscribeServiceImpl extends ServiceImpl<SubscribeMapper, Subscribe
         if (userMapper.findOneByAccount(SubUserAccount) != 1){
             return false;
         }
+        ArrayList<String> besubArrayList = new ArrayList<>(Arrays.asList(beSubUserAccount));
         for (String beSub : beSubUserAccount){
             // 真关系（ return ture ）继续运行
-            if (!checkRelation(SubUserAccount, beSub)){
-                return false;
+            switch (checkRelation(SubUserAccount, beSub)) {
+                case 1 :
+                    continue;
+                case 2 :
+                    subscribeMapper.updateSubrelation((beSub + SubUserAccount).hashCode());
+                    besubArrayList.remove(beSub);
+                    continue;
+                case 3 :
+                    besubArrayList.remove(beSub);
+                    continue;
             }
         }
 
         List<Subscribe> subscribeList = new ArrayList<>();
-        for (String beSub : beSubUserAccount){
+        if (subscribeList.size() == 0){
+            return true;
+        }
+        for (String beSub : besubArrayList){
             Subscribe subscribe = new Subscribe();
             subscribe.setId((beSub + SubUserAccount).hashCode());
             subscribe.setBeSubuser(beSub);
@@ -68,10 +81,8 @@ public class SubscribeServiceImpl extends ServiceImpl<SubscribeMapper, Subscribe
     @Override
     public Boolean delSubscribeMutil(String SubUserAccount, String... beSubUserAccount) {
         for (String beSub: beSubUserAccount){
-            if(checkRelation(beSub, SubUserAccount)){
-                subscribeMapper.updateSubrelation((beSub + SubUserAccount).hashCode());
-            }else {
-                return false;
+            if(checkRelation(beSub, SubUserAccount) != 2){
+                subscribeMapper.cancleSubrelation((beSub + SubUserAccount).hashCode());
             }
         }
         return true;
@@ -90,14 +101,25 @@ public class SubscribeServiceImpl extends ServiceImpl<SubscribeMapper, Subscribe
     }
 
 
-    private Boolean checkRelation(String beSubUserAccount, String sub){
+    private Integer checkRelation(String beSubUserAccount, String sub){
         Integer acc1 = userMapper.findOneByAccount(beSubUserAccount);
         Integer acc2 = userMapper.findOneByAccount(sub);
         Integer subrelation = subscribeMapper.findSubrelation((sub + beSubUserAccount).hashCode());
+        // 不存在此关系
         if(acc1 == 1 && acc2 == 1 && subrelation == 0){
-            return true;
+            return 1;
         }
-        return false;
+        // 存在此关系
+        if(acc1 == 1 && acc2 == 1 && subrelation == 1){
+            return 2;
+        }
+
+        // 不存在这个人
+        if(acc1 != 1 || acc2 != 1 ){
+            return 3;
+        }
+
+        return 0;
     }
 
 

@@ -24,6 +24,9 @@ public interface SubscribeMapper extends BaseMapper<Subscribe> {
     List<String> findRelation(String Subuser);
 
     @Update("update subscribe set isdelete = 1 , updateTime = current_timestamp() where id = #{relationCode}")
+    Integer cancleSubrelation(Integer relationCode);
+
+    @Update("update subscribe set isdelete = 0 , updateTime = current_timestamp() where id = #{relationCode}")
     Integer updateSubrelation(Integer relationCode);
 
 }
