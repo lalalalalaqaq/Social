@@ -1,5 +1,6 @@
 package com.edu.social.controller;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.edu.social.common.BaseResponse;
 import com.edu.social.common.ErrorCode;
 import com.edu.social.common.ResultUtils;
@@ -30,8 +31,6 @@ public class UserController {
     @Resource
     private UserService userService;
 
-
-
     @PostMapping("/register")
     public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
         if (userRegisterRequest == null) {
@@ -57,17 +56,14 @@ public class UserController {
         if (StringUtils.isAnyBlank(userAccount, userPassword)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        User user = userService.userLogin(userAccount, userPassword, request);
+        User user = userService.userLogin(userAccount, userPassword);
         return ResultUtils.success(user);
     }
 
     @PostMapping("/logout")
-    public BaseResponse<Integer> userLogout(HttpServletRequest request) {
-        if (request == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-        int result = userService.userLogout(request);
-        return ResultUtils.success(result);
+    public BaseResponse<Integer> userLogout() {
+        StpUtil.logout();
+        return ResultUtils.success(0);
     }
 
     @GetMapping("/current")
@@ -77,16 +73,6 @@ public class UserController {
         User user = userService.getById(userId);
         User safetyUser = userService.getSafetyUser(user);
         return ResultUtils.success(safetyUser);
-    }
-
-    @PostMapping("/delete")
-    public BaseResponse<Boolean> deleteUser(@RequestBody long id, HttpServletRequest request) {
-        userService.assertAdmin(request);
-        if (id <= 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-        boolean b = userService.removeById(id);
-        return ResultUtils.success(b);
     }
 
 }
