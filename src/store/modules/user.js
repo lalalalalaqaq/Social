@@ -7,9 +7,12 @@ export default {
         avatar: null,
         nickname: '',
         account: '',
-        password: '',
         token: ''
       }
     }
+  },
+  mutations: {
+  },
+  actions: {
   }
 }
