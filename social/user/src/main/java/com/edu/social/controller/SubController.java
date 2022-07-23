@@ -20,10 +20,7 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/sub")
 public class SubController {
-
-    @Resource
-    private SubscribeMapper subscribeMapper;
-
+    
     @Resource
     private SubscribeService subscribeService;
 

@@ -46,4 +46,16 @@ public interface SubscribeService extends IService<Subscribe> {
      */
     List<User> showSubscribe(String Subuser);
 
+    /**
+     * 展现关注列表
+     */
+//    List<User> showSubscribe(String Subuser,Integer pageNum, Integer pageSize);
+
+    /**
+     * 用户脱敏
+     *
+     * @param originUser
+     * @return
+     */
+    void getSafetyUser(User originUser);
 }

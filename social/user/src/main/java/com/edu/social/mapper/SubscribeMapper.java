@@ -2,6 +2,7 @@ package com.edu.social.mapper;
 
 import com.edu.social.model.entity.Subscribe;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.edu.social.model.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -28,6 +29,9 @@ public interface SubscribeMapper extends BaseMapper<Subscribe> {
 
     @Update("update subscribe set isdelete = 0 , updateTime = current_timestamp() where id = #{relationCode}")
     Integer updateSubrelation(Integer relationCode);
+
+    @Select("SELECT * FROM user where userAccount not in (SELECT beSubuser FROM subscribe where Subuser = #{sub})")
+    List<User> RecommendedUsersToFollow(String sub);
 
 }
 

@@ -41,13 +41,14 @@ public class SubscribeServiceImplTest {
     }
 
     @Test
-    public void showSub(){
-        List<User> userList = subscribeService.showSubscribe("lala1");
+    public void findUserToFollow(){
+        List<User> userList = subscribeService.showSubscribe("Ooorange");
         for (User user : userList){
             System.out.println(user);
         }
 
     }
+
 
     @Test
     public void hash(){

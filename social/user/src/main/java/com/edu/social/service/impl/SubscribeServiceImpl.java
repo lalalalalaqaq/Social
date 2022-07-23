@@ -6,6 +6,7 @@ import com.edu.social.model.entity.Subscribe;
 import com.edu.social.model.entity.User;
 import com.edu.social.service.SubscribeService;
 import com.edu.social.mapper.SubscribeMapper;
+import com.edu.social.service.UserService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -53,12 +54,11 @@ public class SubscribeServiceImpl extends ServiceImpl<SubscribeMapper, Subscribe
                     continue;
                 case 3 :
                     besubArrayList.remove(beSub);
-                    continue;
             }
         }
 
         List<Subscribe> subscribeList = new ArrayList<>();
-        if (subscribeList.size() == 0){
+        if (besubArrayList.size() == 0){
             return true;
         }
         for (String beSub : besubArrayList){
@@ -90,15 +90,11 @@ public class SubscribeServiceImpl extends ServiceImpl<SubscribeMapper, Subscribe
 
     @Override
     public List<User> showSubscribe(String SubUserAccount) {
-        List<String> beSubAcc = subscribeMapper.findRelation(SubUserAccount);
-        ArrayList<User> userArrayList = new ArrayList<>();
-        for (String beSub : beSubAcc){
-            User user = userMapper.findOneUser(beSub);
-            userArrayList.add(user);
-        }
-
-        return userArrayList;
+        List<User> users = subscribeMapper.RecommendedUsersToFollow(SubUserAccount);
+        users.forEach(u -> getSafetyUser(u));
+        return users;
     }
+
 
 
     private Integer checkRelation(String beSubUserAccount, String sub){
@@ -122,6 +118,21 @@ public class SubscribeServiceImpl extends ServiceImpl<SubscribeMapper, Subscribe
         return 0;
     }
 
+    /**
+     * 用户脱敏
+     *
+     * @param originUser
+     * @return
+     */
+    @Override
+    public void getSafetyUser(User originUser) {
+        originUser.setUserPassword(null);
+        originUser.setCreateTime(null);
+        originUser.setUpdateTime(null);
+        originUser.setIsDelete(null);
+        originUser.setUserRole(null);
+        originUser.setLastdate(null);
+    }
 
 }
 
